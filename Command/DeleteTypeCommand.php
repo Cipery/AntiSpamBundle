@@ -2,6 +2,7 @@
 
 namespace Sithous\AntiSpamBundle\Command;
 
+use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,6 +10,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Sithous\AntiSpamBundle\Entity\SithousAntiSpamType;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\Question;
 
 
 class DeleteTypeCommand extends ContainerAwareCommand
@@ -24,7 +27,8 @@ class DeleteTypeCommand extends ContainerAwareCommand
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
         $repository = $em->getRepository('SithousAntiSpamBundle:SithousAntiSpamType');
-        $dialog = $this->getHelper('dialog');
+        /** @var QuestionHelper $questionHelper */
+        $questionHelper = $this->getHelper('question');
 
         $types = array();
         foreach($repository->findAll() as $type)
@@ -32,11 +36,10 @@ class DeleteTypeCommand extends ContainerAwareCommand
             $types[] = $type->getId();
         }
 
-        if(!$id = $dialog->ask(
+        if(!$id = $questionHelper->ask(
+            $input,
             $output,
-            '<question>Enter the SithousAntiSpamType ID to delete:</question> ',
-            false,
-            $types
+            new ChoiceQuestion('<question>Enter the SithousAntiSpamType ID to delete:</question> ',$types)
         ))
         {
             return $output->writeln('<error>ERROR: An ID must be specified.</error>');
