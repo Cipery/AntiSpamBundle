@@ -35,6 +35,11 @@ class SithousAntiSpamType
     private $maxCalls;
 
     /**
+     * @var SithousAntiSpam
+     */
+    private $sithoutAntiSpam;
+
+    /**
      * Get id
      *
      * @return integer
