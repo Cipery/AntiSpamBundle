@@ -1,5 +1,5 @@
 {
-    "name": "sithous/antispam-bundle",
+    "name": "cipery/antispam-bundle",
     "type": "symfony-bundle",
     "description": "Provides Anti-Spam capabilities to Symfony in an easy to use package..",
     "keywords": [ "anti spam", "brute force", "protection" ],
