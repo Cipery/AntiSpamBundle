@@ -5,7 +5,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Sithous\AntiSpamBundle\Entity\SithousAntiSpam;
 use Sithous\AntiSpamBundle\Entity\SithousAntiSpamType;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class AntiSpamService
 {
@@ -15,9 +15,9 @@ class AntiSpamService
     protected $em;
 
     /**
-     * @var SecurityContext
+     * @var TokenStorage
      */
-    protected $securityContext;
+    protected $tokenStorage;
 
     /**
      * @var string
@@ -44,10 +44,10 @@ class AntiSpamService
      */
     private $_user;
 
-    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, $config)
+    public function __construct(EntityManager $entityManager, TokenStorage $securityContext, $config)
     {
         $this->em = $entityManager;
-        $this->securityContext = $securityContext;
+        $this->tokenStorage = $securityContext;
         $this->config = $config;
     }
 
@@ -252,7 +252,7 @@ class AntiSpamService
      */
     private function _getSecurityContextUser()
     {
-        if (null === $token = $this->securityContext->getToken()) {
+        if (null === $token = $this->tokenStorage->getToken()) {
             return false;
         }
 
